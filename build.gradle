@@ -1,0 +1,21 @@
+apply plugin: 'java'
+
+repositories {
+    jcenter()
+}
+
+sourceCompatibility = JavaVersion.VERSION_1_8
+targetCompatibility = JavaVersion.VERSION_1_8
+
+dependencies {
+    compile 'org.jsoup:jsoup:1.9.1'
+    compile 'org.slf4j:slf4j-api:1.7.21'
+    compile 'org.slf4j:slf4j-simple:1.7.21'
+    compile 'com.google.guava:guava:19.0'
+    compile 'org.jetbrains:annotations:15.0'
+    compile 'net.jcip:jcip-annotations:1.0'
+    compile 'org.powermock:powermock:1.6.5'
+
+    testCompile 'junit:junit:4.12'
+    testCompile 'org.mockito:mockito-all:2.0.2-beta'
+}
