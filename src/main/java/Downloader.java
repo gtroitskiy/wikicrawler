@@ -29,7 +29,8 @@ public class Downloader implements Runnable {
 
     private final BlockingQueue<DownloadTask> queue;
     // TODO: distributed index
-    @GuardedBy("index") private final Multimap<String, WikiPage> index;
+    @GuardedBy("index")
+    private final Multimap<String, WikiPage> index;
     private final ConcurrentHashMap<String, WikiPage> wikiPages;
     private final JsoupFacade jsoup;
     private volatile boolean isRunning;
@@ -71,7 +72,13 @@ public class Downloader implements Runnable {
             logger.info("Processing \"" + url);
 
             // add dummy page to decrease possibility of downloaders working on the same url
-            wikiPages.put(rawUrl, WikiPage.DUMMY_WIKI_PAGE);
+            final WikiPage previousValue = wikiPages.put(rawUrl, WikiPage.DUMMY_WIKI_PAGE);
+            if (previousValue != null) {
+                if (!previousValue.equals(WikiPage.DUMMY_WIKI_PAGE)) {
+                    wikiPages.put(rawUrl, previousValue);
+                }
+                continue;
+            }
 
             final Connection connection = jsoup.connect(url);
             final Document document;
